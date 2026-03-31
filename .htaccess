@@ -1,0 +1,70 @@
+Options -Indexes
+<Files ".htaccess">
+  Require all denied
+</Files>
+<Files "config.php">
+  Require all denied
+</Files>
+<Files "composer.json">
+  Require all denied
+</Files>
+<Files "composer.lock">
+  Require all denied
+</Files>
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+<FilesMatch "\.php$">
+  Require all denied
+</FilesMatch>
+<Files "index.php">
+  Require all granted
+</Files>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml
+  AddOutputFilterByType DEFLATE text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType application/xml "access plus 1 hour"
+  ExpiresByType application/rss+xml "access plus 1 hour"
+  ExpiresByType application/atom+xml "access plus 1 hour"
+  ExpiresByType application/feed+json "access plus 1 hour"
+</IfModule>
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^$ index.html [END]
+  RewriteRule "(^|/)\.git" - [F,L]
+  RewriteRule "(^|/)\.env" - [F,L]
+  RewriteRule ^users/ - [F,L]
+  RewriteRule ^history/ - [F,L]
+  RewriteRule ^content/ - [F,L]
+  RewriteRule ^cache/ - [F,L]
+  RewriteRule ^wikiwikiwiki$ - [F,L]
+  RewriteRule ^wikiwikiwiki/(?!assets(?:/|$)).* - [F,L]
+  RewriteRule ^themes/[^/]+/(?!assets(?:/|$)).* - [F,L]
+  RewriteCond %{REQUEST_URI} (llms|llms-full)\.txt$
+  RewriteRule ^ index.php [L]
+  RewriteCond %{REQUEST_URI} \.(md|txt)$
+  RewriteRule ^ index.php [L]
+  RewriteCond %{REQUEST_URI} (^|/)(config|content)(/|$)
+  RewriteRule ^ index.php [L]
+  RewriteCond %{REQUEST_URI} (^|/)wikiwikiwiki/assets(/|$)
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+  RewriteCond %{REQUEST_URI} (^|/)themes/[^/]+/assets(/|$)
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+  RewriteRule ^index\.html$ - [END]
+  RewriteRule ^ index.php [L]
+</IfModule>
